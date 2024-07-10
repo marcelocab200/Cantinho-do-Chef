@@ -2,7 +2,7 @@ import React from "react";
 import "./styles.scss";
 
 type InputProps = {
-  label: string;
+  label?: string;
   placeholder: string;
   options?: string[];
   type?: string;
@@ -21,7 +21,7 @@ export default function Input({
       className="Input-container"
       style={type === "textarea" ? { height: "100%" } : {}}
     >
-      <label>{label}</label>
+      {label && <label>{label}</label>}
       {type === "text" ? (
         <input className="Input" type="text" placeholder={placeholder}>
           {text}

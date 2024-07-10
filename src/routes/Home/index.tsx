@@ -16,7 +16,7 @@ export default function Home() {
     return (
         <div className={"Home"}>
             <h1>É um prazer te ter por aqui!</h1>
-            <img src={logo} alt="Logo"/>
+            <img src={logo} alt="Logo" className="logo"/>
             <button className={"yellow-button"} onClick={handleButtonClick}>Faça seu pedido</button>
         </div>
     )
