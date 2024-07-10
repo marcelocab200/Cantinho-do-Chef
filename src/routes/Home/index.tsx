@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import './styles.scss';
 
 import Button from '../../components/UI/Button';
@@ -10,7 +10,7 @@ export default function Home() {
     const navigate = useNavigate();
 
     function handleButtonClick() {
-        navigate('/MakeOrder');
+        navigate('/OrderRegister');
     }
 
     return (

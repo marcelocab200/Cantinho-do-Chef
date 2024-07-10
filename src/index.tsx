@@ -5,7 +5,8 @@ import './styles.scss';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Home from './routes/Home';
-import MakeOrder from './routes/MakeOrder';
+import OrderRegister from './routes/OrderRegisterSwiper';
+import OrdersList from './routes/OrdersList';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -15,7 +16,8 @@ root.render(
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/MakeOrder" element={<MakeOrder />} />
+          <Route path="/OrderRegister" element={<OrderRegister />} />
+          <Route path="/OrdersList" element={<OrdersList />}/>
         </Routes>
       </Router>
   </React.StrictMode>
