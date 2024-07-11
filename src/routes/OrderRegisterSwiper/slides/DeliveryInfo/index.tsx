@@ -1,47 +1,53 @@
 import React from "react";
 import "./styles.scss";
 
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
-
-import mapStyles from "../../../../misc/mapStyles";
-import Input from "../../../../components/UI/Input";
+import TextInput from "../../../../components/UI/Input/TextInput";
+import { useOrderContext } from "../../../../context/OrderContext";
+import { getTravelTimeORS } from "../../../../services/api";
 
 export default function DeliveryInfo() {
-  const position = { lat: -18.912863, lng: -48.275471 }; // Coordenadas de Uberlândia-MG
+  const { orderAddress, setOrderAddress, orderTravelTime, setOrderTravelTime } =
+    useOrderContext();
 
-  const options = {
-    styles: mapStyles, // Estilização do mapa
-    mapTypeControl: false, // Remove opção de tipo de mapa (mapa/satélite)
-    streetViewControl: false, // Remove opção de visão de rua
-    fullscreenControl: false, // Remove opção de fullscreen
-    restriction: {
-      // Esta restrição define o limite do mapa de acordo com as coordenadas (neste caso, mostra apenas Uberlândia)
-      latLngBounds: {
-        north: -18.849,
-        south: -19.0,
-        west: -48.35,
-        east: -48.2,
-      },
-      strictBounds: false,
-    },
-  };
+  async function handleCalcDeliveryTime() {
+    try {
+      const response = await getTravelTimeORS(orderAddress);
+      setOrderTravelTime(response); // Tempo de viagem em segundos
+    } catch (e: any) {
+      console.log(e);
+    }
+  }
 
   return (
     <div className="Delivery-info-container">
-            <div className="Delivery-info">
-      <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
-        <GoogleMap
-          mapContainerStyle={{ height: "25rem", width: "25rem" }}
-          center={position}
-          zoom={12}
-          options={options}
-        >
-          <Marker position={position} />
-        </GoogleMap>
-      </LoadScript>
-      <Input label="Qual seu endereço?" placeholder="Digite seu endereço" type="text"/>
+      <div className="Delivery-info">
+        <h1>Só falta levar o pedido até você!</h1>
+        <p></p>
+        <div className="search-input-container">
+          <TextInput
+            label="Qual seu endereço?"
+            placeholder="Digite seu endereço"
+            value={orderAddress}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setOrderAddress(e.target.value)
+            }
+          />
+          <button className="yellow-button" onClick={handleCalcDeliveryTime}>
+            Calcular
+          </button>
+        </div>
+        {orderTravelTime > 0 && (
+          <>
+            <p>{`Tempo de viagem: ${Math.round(
+              orderTravelTime / 60
+            )} minutos.`}</p>
+            <p>{`Tempo de preparo: 30 minutos.`}</p>
+            <p>{`Tempo de entrega: ${
+              Math.round(orderTravelTime / 60) + 30
+            } minutos.`}</p>
+          </>
+        )}
+      </div>
     </div>
-    </div>
-
   );
 }

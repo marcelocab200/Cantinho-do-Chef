@@ -1,56 +1,112 @@
-import React, { useState, useRef } from 'react';
-import './styles.scss';
-import 'swiper/css';
+import React, { useState, useRef } from "react";
+import "./styles.scss";
+import "swiper/css";
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
-import SwiperPagination from '../../components/SwiperPagination';
+import { useOrderContext } from "../../context/OrderContext";
 
-import { Swiper, SwiperSlide } from 'swiper/react';
-import SwiperCore from 'swiper';
+import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore from "swiper";
 
-import OrderDetail from './slides/OrderDetail';
-import DeliveryInfo from './slides/DeliveryInfo';
-import OrderConfirmed from './slides/OrderConfirmed';
+import SwiperPagination from "../../components/SwiperPagination";
 
-// Import Swiper styles
-// import 'swiper/css/pagination';
+import OrderDetail from "./slides/OrderDetail";
+import DeliveryInfo from "./slides/DeliveryInfo";
+import OrderConfirmed from "./slides/OrderConfirmed";
 
 export default function OrderRegister() {
-    const navigate = useNavigate()
+  const navigate = useNavigate();
 
-    const [activeDotIndex, setActiveDotIndex] = useState(1);
-    const swiperRef = useRef<SwiperCore | null>(null);
+  const {
+    orderId,
+    orderItem,
+    orderSize,
+    orderFlavor,
+    orderAddress,
+    registerOrder,
+    resetOrderStates,
+    orderTravelTime,
+    orderDeliveryTimer,
+    setOrderDeliveryTimer,
+  } = useOrderContext();
 
-    function handleButtonClick() {
-        // Caso tenha concluído o Cadastro do Pedido, vai para a tela de Lista de Pedidos
-        if (activeDotIndex === 3) {
-            navigate('/OrdersList')
-        }
+  const [activeDotIndex, setActiveDotIndex] = useState(1);
+  const swiperRef = useRef<SwiperCore | null>(null);
 
-        // Apenas avança o activeDotIndex
-        if (swiperRef.current) {
-            swiperRef.current.slideNext();
-            setActiveDotIndex((prev) => prev + 1);
-        }
+  function handleProceed() {
+    console.log(typeof new Date());
 
+    // No passo 1 do cadastro de pedido, caso algum dos inputs obrigatorios nao tenha sido selecionado, nao permite o usuario prosseguir
+    // Descricao adicional é um input opcional
+    if (activeDotIndex === 1) {
+      if (orderItem === "" || orderSize === "" || orderFlavor === "") {
+        console.log("Por favor, preencha todos os campos obrigatorios.");
+        return;
+      }
     }
 
-    return (
-        <div className='Order-register'>
-            <SwiperPagination activeDot={activeDotIndex} dots={[{id: 1, text: 'Fazer pedido'}, {id: 2, text: 'Entrega'}, {id: 3, text: 'OK!'}]}/>
-            <Swiper
-                
-                className="swiper"
-                allowTouchMove={false}
-                onSwiper={(swiper: SwiperCore) => (swiperRef.current = swiper)}
-                >
+    // No passo 2 do cadastro de pedido, caso o input obrigatorio nao tenha sido preenchido, nao permite o usuario prosseguir
+    if (activeDotIndex === 2) {
+      if (orderAddress === "" || orderTravelTime === 0) {
+        console.log("Por favor, preencha o campo de endereço.");
+        return;
+      }
+    }
 
-                <SwiperSlide><OrderDetail /></SwiperSlide>
-                <SwiperSlide><DeliveryInfo /></SwiperSlide>
-                <SwiperSlide><OrderConfirmed /></SwiperSlide>
-            </Swiper>
-            <button className='yellow-button' onClick={handleButtonClick}>Prosseguir</button>
-        </div>
-    )
+    // Caso tenha concluído o processo anterior, registra o pedido, reseta os estados com dados do pedido e redireciona para a tela de Lista de Pedidos.
+    // Alem disso, envia a informacao do timer (pelo id do pedido) para orderDeliveryTimer, que ira armazenar todos os dados de timer dos pedidos
+    if (activeDotIndex === 3) {
+      if (orderDeliveryTimer === null) {
+        setOrderDeliveryTimer({ [orderId + 1]: orderTravelTime + 30 * 60 });
+        console.log({ [orderId + 1]: orderTravelTime + 30 * 60 });
+      } else {
+        setOrderDeliveryTimer((prev) => {
+          console.log({ ...prev, [orderId + 1]: orderTravelTime + 30 * 60 });
+          return { ...prev, [orderId + 1]: orderTravelTime + 30 * 60 };
+        });
+      }
+      registerOrder();
+      resetOrderStates();
+      navigate("/OrdersList");
+      // console.log(orderDeliveryTimer)
+    }
+
+    // Apenas avança o activeDotIndex caso tenha preenchido os campos corretamente
+    if (swiperRef.current) {
+      swiperRef.current.slideNext();
+      setActiveDotIndex((prev) => prev + 1);
+    }
+  }
+
+  return (
+    <div className="Order-register">
+      <SwiperPagination
+        activeDot={activeDotIndex}
+        dots={[
+          { id: 1, text: "Fazer pedido" },
+          { id: 2, text: "Entrega" },
+          { id: 3, text: "OK!" },
+        ]}
+      />
+      <Swiper
+        className="swiper"
+        allowTouchMove={false}
+        onSwiper={(swiper: SwiperCore) => (swiperRef.current = swiper)}
+      >
+        <SwiperSlide>
+          <OrderDetail />
+        </SwiperSlide>
+        <SwiperSlide>
+          <DeliveryInfo />
+        </SwiperSlide>
+        <SwiperSlide>
+          <OrderConfirmed />
+        </SwiperSlide>
+      </Swiper>
+      <button className="yellow-button" onClick={handleProceed}>
+        Prosseguir
+      </button>
+    </div>
+  );
 }
