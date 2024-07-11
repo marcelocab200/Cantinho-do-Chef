@@ -20,3 +20,9 @@
     outline: 1px solid var(--outline-black);
   }
 }
+
+@media (max-width: 750px) {
+  .Home {
+    transform: scale(0.8);
+  }
+}

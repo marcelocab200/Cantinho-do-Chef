@@ -78,3 +78,9 @@
     padding-inline: 3rem;
   }
 }
+
+@media (max-width: 800px) {
+  .Input-container {
+    display: none;
+  }
+}

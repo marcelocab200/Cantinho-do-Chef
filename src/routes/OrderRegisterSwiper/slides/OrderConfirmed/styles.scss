@@ -7,3 +7,7 @@
   align-items: center;
   gap: 3rem;
 }
+
+@media (max-width: 750px) {
+  .Order-confirmed {transform: scale(0.7);}
+}
