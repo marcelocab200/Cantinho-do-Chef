@@ -16,7 +16,7 @@ export type OrderProps = {
   orderAddress: string;
 };
 
-type DeliveryTimerProps = {
+export type DeliveryTimerProps = {
   [key: string]: number; // Key é o ID do pedido; o valor é o tempo de entrega em minutos
 };
 
@@ -65,8 +65,6 @@ export function ContextProvider({ children }: OrderProviderProps) {
   const [orderDeliveryTimer, setOrderDeliveryTimer] =
     useState<DeliveryTimerProps | null>(null); // Todos os temporizadores de entrega do pedido em segundos
   const [allOrdersList, setAllOrdersList] = useState<OrderProps[] | []>([]); // Lista com todos os pedidos
-
-  const [timerTrigger, setTimerTrigger] = useState(false); // O temporizador ira sofrer um countdown (de 1 minuto) sempre que o trigger mudar de estado por meio do useEffect
 
   useEffect(() => {
     const interval = setInterval(() => {

@@ -35,8 +35,6 @@ export default function OrderRegister() {
   const swiperRef = useRef<SwiperCore | null>(null);
 
   function handleProceed() {
-    console.log(typeof new Date());
-
     // No passo 1 do cadastro de pedido, caso algum dos inputs obrigatorios nao tenha sido selecionado, nao permite o usuario prosseguir
     // Descricao adicional é um input opcional
     if (activeDotIndex === 1) {
@@ -59,17 +57,15 @@ export default function OrderRegister() {
     if (activeDotIndex === 3) {
       if (orderDeliveryTimer === null) {
         setOrderDeliveryTimer({ [orderId + 1]: orderTravelTime + 30 * 60 });
-        console.log({ [orderId + 1]: orderTravelTime + 30 * 60 });
       } else {
-        setOrderDeliveryTimer((prev) => {
-          console.log({ ...prev, [orderId + 1]: orderTravelTime + 30 * 60 });
-          return { ...prev, [orderId + 1]: orderTravelTime + 30 * 60 };
-        });
+        setOrderDeliveryTimer((prev) => ({
+          ...prev,
+          [orderId + 1]: orderTravelTime + 30 * 60,
+        }));
       }
       registerOrder();
       resetOrderStates();
       navigate("/OrdersList");
-      // console.log(orderDeliveryTimer)
     }
 
     // Apenas avança o activeDotIndex caso tenha preenchido os campos corretamente

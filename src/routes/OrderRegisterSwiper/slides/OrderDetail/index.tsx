@@ -12,6 +12,7 @@ import menuItems from "../../../../misc/menuItems";
 
 export default function OrderDetail() {
   const [selectedItem, setSelectedItem] = useState<MenuItemProps>(menuItems[0]);
+
   const {
     orderItem,
     setOrderItem,
@@ -40,7 +41,7 @@ export default function OrderDetail() {
   }, [selectedItem]);
 
   return (
-    <div className="Container">
+    <div className="Order-Detail-Container">
       <div className={"Order-detail"}>
         <form>
           <SelectInput
@@ -81,7 +82,7 @@ export default function OrderDetail() {
         </form>
         {selectedItem !== null && (
           <div className="Item-detail">
-            <img src={selectedItem.img} alt="Item image" />
+            <img src={selectedItem.img} alt="Item" />
             <div id="Item-text-container">
               <div>
                 <p id="Item-title">{`${selectedItem.name} ${

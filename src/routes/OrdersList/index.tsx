@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./styles.scss";
 
 import logo from "../../assets/logo.png";
@@ -9,17 +9,30 @@ import TextInput from "../../components/UI/Input/TextInput";
 import { OrderProps, useOrderContext } from "../../context/OrderContext";
 
 import { useNavigate } from "react-router-dom";
+import OrderDetailModal from "../../components/OrderDetailModal";
 
 export default function OrdersList() {
   const navigate = useNavigate();
   const { allOrdersList } = useOrderContext();
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [selectedOrder, setSelectedOrder] = useState(allOrdersList[0]);
 
   function handleButtonClick() {
     navigate("/OrderRegister");
   }
 
+  function handleModalOpen(order: OrderProps) {
+    setOpenModal(true);
+    setSelectedOrder(order);
+  }
+
   return (
     <div className="Orders-list">
+      <OrderDetailModal
+        order={selectedOrder}
+        open={openModal}
+        handleClose={() => setOpenModal(false)}
+      />
       <header>
         <div className="Logo-title">
           <a href="/">
@@ -32,7 +45,11 @@ export default function OrdersList() {
       <div className="Orders-grid">
         {allOrdersList.length > 0 ? (
           allOrdersList.map((order: OrderProps) => (
-            <OrderCard key={order.orderId} {...order} />
+            <OrderCard
+              key={order?.orderId}
+              onClick={() => handleModalOpen(order)}
+              {...order}
+            />
           ))
         ) : (
           <p>Carregando...</p>

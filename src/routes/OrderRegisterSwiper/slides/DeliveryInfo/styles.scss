@@ -33,7 +33,7 @@
       width: 65%;
       margin-bottom: 0.25rem;
     }
-    
+
     .yellow-button {
       height: 3rem;
       background-color: var(--accent-yellow);
@@ -50,14 +50,12 @@
     p {
       margin: 0;
       padding: 0;
-      
     }
 
     .Time-info {
       width: 70%;
       display: flex;
       flex-direction: column;
-      // gap: 1rem;
     }
 
     .Lower-text {
@@ -70,14 +68,21 @@
 
 @media (max-width: 900px) {
   .Delivery-info {
-    transform: scale(0.8);
+    .Input-container {
+      width: 100%;
+    }
+    .yellow-button {
+      max-width: 10rem;
+    }
   }
 }
 
-@media (max-width: 500px) {
-  .Delivery-info {
-    h1 {
-      font-size: 1.75rem;
+@media (max-width: 600px) {
+  .Delivery-info-container {
+    .Delivery-info {
+      h1 {
+        font-size: 1.55rem;
+      }
     }
   }
 }

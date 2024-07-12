@@ -80,7 +80,9 @@
 }
 
 @media (max-width: 800px) {
-  .Input-container {
-    display: none;
+  .Orders-list {
+    .Input-container {
+      display: none;
+    }
   }
 }
