@@ -22,6 +22,10 @@ Após isso, crie na .env a variável `REACT_APP_OPEN_ROUTE_SERVICE_API_KEY`, ond
 
 `npm start`
 
+## Ou você pode acessar a aplicação em
+
+https://cantinho-do-chef-rmtblhsde-marcelo-cabrals-projects.vercel.app
+
 ## Comentários adicionais
 
 Gostaria de comentar sobre a decisão técnica por trás do projeto. Por ser um sistema de estrutura simples, optei por utilizar o React Context API para realizar o gerenciamento de estados entre componentes. Além disso, utilizei Typescript para evitar erros de tipagem no projeto, que poderiam vir a atrasar a produção. Por fim, utilizei o React Router a fim de trazer uma organização de páginas ao projeto, utilizei outros recursos que iriam facilitar a codagem (como SASS) e recursos visuais (como o Swiper na página de Cadastro de Pedidos). 
